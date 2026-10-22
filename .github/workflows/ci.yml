@@ -54,3 +54,100 @@ jobs:
             htmlcov/
 
   # ---------------------------------------------------------------
+  # Job 2: Deploy — Trigger Render only on push to main (gated)
+  # ---------------------------------------------------------------
+  deploy:
+    runs-on: ubuntu-latest
+    needs: test
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+
+    steps:
+      - name: Trigger Render deploy
+        run: |
+          curl -s -o /dev/null -w "%{http_code}" \
+            "${{ secrets.RENDER_DEPLOY_HOOK_URL }}"
+          echo "Deploy webhook triggered"
+
+  # ---------------------------------------------------------------
+  # Job 3: Smoke Test — Verify live deployment
+  # ---------------------------------------------------------------
+  smoke-test:
+    runs-on: ubuntu-latest
+    needs: deploy
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+
+    steps:
+      - name: Wait for Render to build and deploy
+        run: |
+          echo "Waiting 60s for Render to start building..."
+          sleep 60
+
+      - name: Poll /health until commit SHA matches
+        run: |
+          LIVE_URL="${{ secrets.LIVE_APP_URL }}"
+          EXPECTED_SHA="${{ github.sha }}"
+          MAX_ATTEMPTS=30
+          INTERVAL=20
+
+          echo "Expecting commit SHA: $EXPECTED_SHA"
+          echo "Polling: $LIVE_URL/health"
+
+          for i in $(seq 1 $MAX_ATTEMPTS); do
+            RESPONSE=$(curl -sf "$LIVE_URL/health" || echo '{"commit":"UNAVAILABLE"}')
+            LIVE_SHA=$(echo "$RESPONSE" | python3 -c "import sys,json; print(json.load(sys.stdin).get('commit',''))" 2>/dev/null || echo "UNAVAILABLE")
+
+            echo "Attempt $i/$MAX_ATTEMPTS — Live SHA: $LIVE_SHA"
+
+            if [ "$LIVE_SHA" = "$EXPECTED_SHA" ]; then
+              echo "✅ Commit SHA matches! Deployment verified."
+              break
+            fi
+
+            if [ "$i" -eq "$MAX_ATTEMPTS" ]; then
+              echo "❌ Timed out waiting for deployment. Last SHA: $LIVE_SHA"
+              exit 1
+            fi
+
+            sleep $INTERVAL
+          done
+
+      - name: Smoke test — Health check
+        run: |
+          LIVE_URL="${{ secrets.LIVE_APP_URL }}"
+          STATUS=$(curl -sf -o /dev/null -w "%{http_code}" "$LIVE_URL/health")
+          if [ "$STATUS" -eq 200 ]; then
+            echo "✅ Health check passed (HTTP 200)"
+          else
+            echo "❌ Health check failed (HTTP $STATUS)"
+            exit 1
+          fi
+
+      - name: Smoke test — is_adult(20)
+        run: |
+          LIVE_URL="${{ secrets.LIVE_APP_URL }}"
+          RESPONSE=$(curl -sf -X POST "$LIVE_URL/api/execute" \
+            -H "Content-Type: application/json" \
+            -d '{"function": "is_adult", "args": [20]}')
+          echo "Response: $RESPONSE"
+          RESULT=$(echo "$RESPONSE" | python3 -c "import sys,json; d=json.load(sys.stdin); print(d['success'] and d['result'] == True)")
+          if [ "$RESULT" = "True" ]; then
+            echo "✅ is_adult(20) = True — PASSED"
+          else
+            echo "❌ is_adult(20) — FAILED"
+            exit 1
+          fi
+
+      - name: Smoke test — factorial(5)
+        run: |
+          LIVE_URL="${{ secrets.LIVE_APP_URL }}"
+          RESPONSE=$(curl -sf -X POST "$LIVE_URL/api/execute" \
+            -H "Content-Type: application/json" \
+            -d '{"function": "factorial", "args": [5]}')
+          echo "Response: $RESPONSE"
+          RESULT=$(echo "$RESPONSE" | python3 -c "import sys,json; d=json.load(sys.stdin); print(d['success'] and d['result'] == 120)")
+          if [ "$RESULT" = "True" ]; then
+            echo "✅ factorial(5) = 120 — PASSED"
+          else
+            echo "❌ factorial(5) — FAILED"
+            exit 1
+          fi
