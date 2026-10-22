@@ -199,3 +199,149 @@ class TestGreet:
 
 
 # ---------------------------------------------------------------------------
+# 6. find_max(numbers)
+# ---------------------------------------------------------------------------
+class TestFindMax:
+    """Return the largest number. Empty list raises ValueError."""
+
+    @pytest.mark.parametrize(
+        "numbers, expected",
+        [
+            ([1, 5, 3], 5),
+            ([-10, -5, -20], -5),
+            ([42], 42),
+            ([3, 3, 3], 3),
+            ([1.5, 2.5, 0.5], 2.5),
+            ((10, 20, 15), 20),
+        ],
+    )
+    def test_valid_lists(self, numbers, expected):
+        assert find_max(numbers) == expected
+
+    def test_empty_list_raises(self):
+        with pytest.raises(ValueError, match="list is empty"):
+            find_max([])
+
+    def test_empty_tuple_raises(self):
+        with pytest.raises(ValueError, match="list is empty"):
+            find_max(())
+
+    def test_wrong_type_raises(self):
+        with pytest.raises(TypeError):
+            find_max(123)
+
+    def test_unorderable_elements_raises(self):
+        with pytest.raises(TypeError):
+            find_max([1, "a"])
+
+
+# ---------------------------------------------------------------------------
+# 7. get_price(prices, item)
+# ---------------------------------------------------------------------------
+class TestGetPrice:
+    """Return price of item. Missing item raises KeyError."""
+
+    def test_existing_item(self):
+        prices = {"apple": 1.5, "banana": 0.75}
+        assert get_price(prices, "apple") == 1.5
+
+    def test_another_existing_item(self):
+        prices = {"apple": 1.5, "banana": 0.75}
+        assert get_price(prices, "banana") == 0.75
+
+    def test_missing_item_raises(self):
+        prices = {"apple": 1.5}
+        with pytest.raises(KeyError, match="cherry not found"):
+            get_price(prices, "cherry")
+
+    def test_empty_dict_raises(self):
+        with pytest.raises(KeyError, match="apple not found"):
+            get_price({}, "apple")
+
+    def test_integer_price(self):
+        prices = {"widget": 10}
+        assert get_price(prices, "widget") == 10
+
+    def test_zero_price(self):
+        prices = {"free_item": 0}
+        assert get_price(prices, "free_item") == 0
+
+    def test_wrong_type_raises(self):
+        with pytest.raises(TypeError):
+            get_price(None, "item")
+
+
+# ---------------------------------------------------------------------------
+# 8. swap(pair)
+# ---------------------------------------------------------------------------
+class TestSwap:
+    """Swap two values. Not exactly 2 values raises ValueError."""
+
+    def test_tuple_swap(self):
+        assert swap((1, 2)) == (2, 1)
+
+    def test_list_swap(self):
+        result = swap(["a", "b"])
+        assert result == ("b", "a")
+
+    def test_heterogeneous_elements(self):
+        assert swap((1, "two")) == ("two", 1)
+
+    def test_string_pair_swap(self):
+        assert swap("ab") == ("b", "a")
+
+    def test_return_type_is_tuple(self):
+        result = swap([10, 20])
+        assert isinstance(result, tuple)
+
+    def test_single_element_raises(self):
+        with pytest.raises(ValueError, match="pair must have exactly 2 values"):
+            swap((1,))
+
+    def test_three_elements_raises(self):
+        with pytest.raises(ValueError, match="pair must have exactly 2 values"):
+            swap((1, 2, 3))
+
+    def test_empty_raises(self):
+        with pytest.raises(ValueError, match="pair must have exactly 2 values"):
+            swap(())
+
+    def test_wrong_type_raises(self):
+        with pytest.raises(TypeError):
+            swap(123)
+
+
+# ---------------------------------------------------------------------------
+# 9. common_items(set_a, set_b)
+# ---------------------------------------------------------------------------
+class TestCommonItems:
+    """Return the intersection of two sets."""
+
+    def test_partial_overlap(self):
+        assert common_items({1, 2, 3}, {2, 3, 4}) == {2, 3}
+
+    def test_no_overlap(self):
+        assert common_items({1, 2}, {3, 4}) == set()
+
+    def test_identical_sets(self):
+        assert common_items({1, 2, 3}, {1, 2, 3}) == {1, 2, 3}
+
+    def test_one_empty(self):
+        assert common_items(set(), {1, 2}) == set()
+
+    def test_both_empty(self):
+        assert common_items(set(), set()) == set()
+
+    def test_mixed_types_in_sets(self):
+        assert common_items({"apple", 42}, {42, "banana"}) == {42}
+
+    def test_return_type_is_set(self):
+        result = common_items({1}, {1})
+        assert isinstance(result, set)
+
+    def test_wrong_type_raises(self):
+        with pytest.raises(TypeError):
+            common_items({1, 2}, [2, 3])
+
+
+# ---------------------------------------------------------------------------
