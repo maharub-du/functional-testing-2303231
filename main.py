@@ -19,10 +19,12 @@ app = FastAPI(title="Functional Testing Dashboard")
 # Mount static assets (CSS, JS)
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
-# Deployed commit SHA (set by CI, Render, or environment)
+# Deployed commit SHA (set by CI, Render, Vercel, Railway, or environment)
 COMMIT_SHA = (
     os.getenv("GIT_COMMIT_SHA")
     or os.getenv("RENDER_GIT_COMMIT")
+    or os.getenv("VERCEL_GIT_COMMIT_SHA")
+    or os.getenv("RAILWAY_GIT_COMMIT_SHA")
     or os.getenv("GITHUB_SHA")
     or "local-dev"
 )
@@ -100,3 +102,8 @@ async def dashboard():
     # Inject commit SHA into the page
     html = html.replace("{{COMMIT_SHA}}", COMMIT_SHA)
     return HTMLResponse(content=html)
+
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run("main:app", host="127.0.0.1", port=8000, reload=True)

@@ -34,4 +34,5 @@ build/
 dist/
 *.egg-info/
 *.pdf
+*.docx
 
