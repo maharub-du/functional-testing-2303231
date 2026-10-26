@@ -1,8 +1,8 @@
 # Functional Testing, CI/CD & Live Deployment
 
-[![CI/CD Pipeline](https://github.com/<your-username>/functional-testing-<student-id>/actions/workflows/ci.yml/badge.svg)](https://github.com/<your-username>/functional-testing-<student-id>/actions/workflows/ci.yml)
+[![CI/CD Pipeline](https://github.com/maharub-du/functional-testing-2303231/actions/workflows/ci.yml/badge.svg)](https://github.com/maharub-du/functional-testing-2303231/actions/workflows/ci.yml)
 
-> **Live App:** [https://functional-testing-\<student-id\>.onrender.com](https://functional-testing-<student-id>.onrender.com)
+> **Live App:** [https://functional-testing-2303231.onrender.com](https://functional-testing-2303231.onrender.com)
 
 ---
 
@@ -26,8 +26,8 @@ This project demonstrates **functional testing**, **continuous integration/deplo
 ### 1. Clone & Set Up Environment
 
 ```bash
-git clone https://github.com/<your-username>/functional-testing-<student-id>.git
-cd functional-testing-<student-id>
+git clone https://github.com/maharub-du/functional-testing-2303231.git
+cd functional-testing-2303231
 
 # Create virtual environment
 python -m venv .venv
