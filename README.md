@@ -2,7 +2,10 @@
 
 [![CI/CD Pipeline](https://github.com/maharub-du/functional-testing-2303231/actions/workflows/ci.yml/badge.svg)](https://github.com/maharub-du/functional-testing-2303231/actions/workflows/ci.yml)
 
-> **Live App:** [https://functional-testing-2303231.onrender.com](https://functional-testing-2303231.onrender.com)
+> **Student Name:** Md. Maharub Hossain  
+> **Student ID:** 2303231  
+> **Live App:** [https://functional-testing-2303231.onrender.com](https://functional-testing-2303231.onrender.com)  
+> **Repository:** [https://github.com/maharub-du/functional-testing-2303231](https://github.com/maharub-du/functional-testing-2303231)
 
 ---
 
