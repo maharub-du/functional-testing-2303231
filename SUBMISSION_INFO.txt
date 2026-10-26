@@ -1,0 +1,47 @@
+=============================================================================
+FINAL ASSIGNMENT SUBMISSION DETAILS
+Course: CSE-0409 | Functional Testing, CI/CD & Live Deployment
+=============================================================================
+
+Student Name: Md. Maharub Hossain
+Student ID: 2303231
+Course Title: Software Testing, Quality Assurance and DevOps
+Submission Date: October 2026
+
+-----------------------------------------------------------------------------
+REQUIRED SUBMISSION DELIVERABLES (PARTS 1 TO 5)
+-----------------------------------------------------------------------------
+
+1. GitHub Repository URL:
+   https://github.com/maharub-du/functional-testing-2303231
+
+2. Live Application URL (Render):
+   https://functional-testing-2303231.onrender.com
+
+3. Commit SHA to Grade:
+   507b6b46d96829c76aac4450dcbb7c4e12e3d5a8 (or short: 507b6b4)
+
+4. Demo Video Link:
+   [Paste your Google Drive or YouTube public link here after recording]
+
+5. Comprehensive Written Report:
+   Assignment_Report_Functional_Testing_and_CICD.docx (in this project root)
+
+-----------------------------------------------------------------------------
+KEY PROJECT HIGHLIGHTS & RUBRIC ACCOMPLISHMENTS
+-----------------------------------------------------------------------------
+- Part 1 (8 Points): 197 parametrized tests covering all 16 target functions with
+                     100% line coverage and 100% branch coverage using pytest.
+- Part 2 (3 Points): Structured Git repository with 14 conventional commits,
+                     pinned dependencies (requirements.txt), and clean .gitignore.
+- Part 3 (4 Points): GitHub Actions multi-version CI matrix across Python 3.10,
+                     3.11, and 3.12 with flake8 linting and coverage gate.
+- Part 4 (3 Points): Interactive full-stack web dashboard built with FastAPI
+                     and HTML5/CSS3/JavaScript featuring 16 function cards.
+- Part 5 (2 Points): Gated continuous deployment to Render with live automated
+                     smoke tests verifying /health and live execution.
+- Bonus 1 (+1 Point): 3 feature branches merged with merge commits.
+- Bonus 2 (+1 Point): Branch protection ruleset active on 'main' branch.
+
+Total Grade Target: 20/20 + 2/2 Bonus Points = 22 Points
+=============================================================================
