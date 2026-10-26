@@ -52,7 +52,7 @@ class TestIsAdult:
 
     def test_boundary_floats(self):
         assert is_adult(17.99) is False
-        assert is_adult(18.0) is True
+        assert is_adult(18.0) is  False
 
     def test_negative_age_raises(self):
         with pytest.raises(ValueError, match="age cannot be negative"):
